@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url(./fonts/alarm-clock/stylesheet.css);
+@import url(./fonts/bebas-regular/stylesheet.css);
+@import url(./fonts/montserrat/stylesheet.css);
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+    background-color: #000000;
+}
+
+.navbar {
+    color:#FFFFFF;
+}
+
+.navbar a:hover {
+    color:#F38321;
+}
