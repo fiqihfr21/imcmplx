@@ -16,15 +16,15 @@ export const Secondary = () => {
     const cardList1 = [
         {
             image_url: dummy1,
-            url: '/secondary/0x14d8BAA04Ee4587e700Fc1817561819415B2474A'
+            url: '/secondary/0x63B2B50E922ACa7DBB37490CE3cF720180710FE2'
         },
         {
             image_url: dummy3,
-            url: '/secondary/0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D'
+            url: '/secondary/0x63B2B50E922ACa7DBB37490CE3cF720180710FE2'
         },
         {
             image_url: dummy4,
-            url: '/secondary/0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d'
+            url: '/secondary/0x63B2B50E922ACa7DBB37490CE3cF720180710FE2'
         },
     ];
     const cardList2 = [

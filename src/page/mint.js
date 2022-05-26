@@ -10,8 +10,8 @@ import smartcontract from "../SmartContract.json";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS;
-const contractAddress = "0x75d3eAF4449b52bd6D3A1C4F8F9b5d1c41183519";
+const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS;
+// const contractAddress = "0x63B2B50E922ACa7DBB37490CE3cF720180710FE2";
 
 export const Mint = () => {
   const [price, setPrice] = useState(0);
@@ -90,8 +90,8 @@ export const Mint = () => {
         console.log("response : ", response);
       } catch (err) {
         console.log(err);
-        // console.log(err.data['message'].substring(43));
-        // toast.error(err.data['message'].substring(43));
+        //console.log(err.data['message'].substring(43));
+        toast.error(err.data['message'].substring(43));
       }
     }
   }
