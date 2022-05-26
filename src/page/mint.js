@@ -5,18 +5,40 @@ import footerProduct from "../assets/footer-product.png";
 import itemOrnament1 from "../assets/item-ornament-1.png";
 import ornament4 from "../assets/ornament-4.png";
 import { useEffect, useState } from "react";
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import smartcontract from "../SmartContract.json";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS;
+// const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS;
+const contractAddress = "0x75d3eAF4449b52bd6D3A1C4F8F9b5d1c41183519";
 
 export const Mint = () => {
-
   const [price, setPrice] = useState(0);
   const [salesMint, setSalesMint] = useState(0);
   const [accounts, setAccounts] = useState(false);
+  let [count, setCount] = useState(1);
+
+  function incrementCount() {
+    if (count >= 1 && count <= 2) {
+      count = count + 1;
+    }
+    setCount(count);
+  }
+  function decrementCount() {
+    if (count > 1 && count <= 3) {
+      count = count - 1;
+    }
+    setCount(count);
+  }
+
+  const inputStyle = {
+    width: "100px",
+    textAlign: "center",
+    fontWeight: "bold",
+    display: "inline-block",
+    verticalAlign: "middle",
+  };
 
   async function initWeb3() {
     if (window.ethereum) {
@@ -24,7 +46,7 @@ export const Mint = () => {
         method: "eth_requestAccounts",
       });
       setAccounts(accounts);
-      
+
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(
@@ -58,24 +80,25 @@ export const Mint = () => {
         smartcontract.abi,
         signer
       );
+      
       try {
         const price = await contract.price.call();
         const priceEth = ethers.utils.formatEther(price);
-        const response = await contract.publicSalesMint({
-          value: ethers.utils.parseEther(priceEth.toString()),
+        const response = await contract.publicSalesMint(BigNumber.from(count), {
+          value: ethers.utils.parseEther((priceEth * parseInt(count)).toString()),
         });
         console.log("response : ", response);
       } catch (err) {
-        // console.log(err)
+        console.log(err);
         // console.log(err.data['message'].substring(43));
-        toast.error(err.data['message'].substring(43));
+        // toast.error(err.data['message'].substring(43));
       }
     }
   }
 
   return (
     <div className="flex flex-col container mx-auto px-40 py-12">
-    <>
+      <>
         <ToastContainer
           position="top-center"
           autoClose={5000}
@@ -116,6 +139,7 @@ export const Mint = () => {
               {salesMint}
             </span>
             <img src={borderSideRect} alt="border-side-rect" />
+
             <div className="absolute left-40 top-8 flex items-center space-x-2">
               <div className="relative">
                 <div className="absolute -top-6 right-0">
@@ -129,6 +153,7 @@ export const Mint = () => {
                   className="w-auto h-[50px]"
                 />
               </div>
+
               <button className="relative" onClick={handleMint}>
                 <img
                   src={ornament4}
@@ -141,6 +166,30 @@ export const Mint = () => {
               </button>
             </div>
           </div>
+          <div className="flex-1 space-y-6">
+            <div className="flex relative">
+                <div className="absolute -top-6 right-0">
+              <button
+                className="mb-2 font-alarmclock text-7xl text-[#FF8E32]"
+                onClick={decrementCount}
+              >
+                -
+              </button>
+              <div
+                style={inputStyle}
+                className=" mb-2 font-alarmclock text-7xl text-[#FF8E32]"
+              >
+                {count}
+              </div>
+              <button
+                className="mb-2 font-alarmclock text-7xl text-[#FF8E32]"
+                onClick={incrementCount}
+              >
+                +
+              </button>
+              </div>
+            </div>
+          </div><br/><br/>
           <div className="flex space-x-4 items-center">
             <img
               src={footerProduct}
