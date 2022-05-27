@@ -1,87 +1,43 @@
-import dummy1 from '../../assets/image1.png';
-import dummy2 from '../../assets/product-image.png';
-import dummy3 from '../../assets/dummy-image-6.png';
-import dummy4 from '../../assets/dummy-image-7.png';
-import dummy5 from '../../assets/product-image-5.png';
-import dummy6 from '../../assets/product-image-6.png';
-import dummy7 from '../../assets/product-image-7.png';
-import dummy9 from '../../assets/product-image-9.png';
-import dummy10 from '../../assets/product-image-10.png';
-import dummy11 from '../../assets/product-image-11.png';
-import dummy12 from '../../assets/product-image-12.png';
-import { Gallery } from './gallery';
 import { DetailGallery } from './detailSecondary/detailGallery';
+import { useEffect, useState } from 'react';
+import { ethers } from 'ethers';
+import axios from 'axios';
+import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 
 export const Secondary = () => {
-    const cardList1 = [
+
+  const [cardList, setCardList] = useState([]);
+  const [collection, setCollection] = useState([]);
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const sdk = new ThirdwebSDK(signer, provider);
+  const contract = sdk.getMarketplace(process.env.REACT_APP_THIRDWEB_MARKETPLACE);
+
+  async function fetchData () {
+    axios
+      .get(
+        `${process.env.REACT_APP_OPENSEA_URL}/assets?asset_contract_address=${process.env.REACT_APP_CONTRACT_ADDRESS}`,
         {
-            image_url: dummy1,
-            url: '/secondary/0x63B2B50E922ACa7DBB37490CE3cF720180710FE2'
-        },
-        {
-            image_url: dummy3,
-            url: '/secondary/0x63B2B50E922ACa7DBB37490CE3cF720180710FE2'
-        },
-        {
-            image_url: dummy4,
-            url: '/secondary/0x63B2B50E922ACa7DBB37490CE3cF720180710FE2'
-        },
-    ];
-    const cardList2 = [
-        {
-            asset_contract: {address: '#'},
-            image_url: dummy2,
-            token_id: "1"
-        },
-        {
-            asset_contract: {address: '#'},
-            image_url: dummy5,
-            token_id: "2"
-        },
-        {
-            asset_contract: {address: '#'},
-            image_url: dummy6,
-            token_id: "3"
-        },
-        {
-            asset_contract: {address: '#'},
-            image_url: dummy7,
-            token_id: "4"
-        },
-        {
-            asset_contract: {address: '#'},
-            image_url: dummy9,
-            token_id: "5"
-        },
-        {
-            asset_contract: {address: '#'},
-            image_url: dummy10,
-            token_id: "6"
-        },
-    ];
-    const cardList3 = [
-        {
-            asset_contract: {address: '#'},
-            image_url: dummy11,
-            token_id: "7"
-        },
-        {
-            asset_contract: {address: '#'},
-            image_url: dummy12,
-            token_id: "8"
-        },
-        {
-            asset_contract: {address: '#'},
-            image_url: dummy2,
-            token_id: "10"
-        },
-    ];
+          "x-api-key": process.env.REACT_APP_OPENSEA_KEY,
+        }
+      )
+      .then((res) => {
+        setCollection(res.data.assets[0].collection)
+      });
+
+    // const tokenContract = process.env.REACT_APP_CONTRACT_ADDRESS;
+    const listings = await contract.getAllListings();
+    setCardList(listings)
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
     return (
         <div className={"flex flex-col justify-center container mx-auto py-12 px-40"}>
-            <Gallery key={"Single"} title={"Single"} columns={2} cards={cardList1} />
-            {/* <DetailGallery key={"Series"} title={"Series"} columns={3} cards={cardList2} />
-            <DetailGallery key={"Collabs"} title={"Collabs"} columns={3} cards={cardList3} /> */}
+            <DetailGallery key={collection.name} title={collection.name} columns={3} cards={cardList} /> 
         </div>
     )
 }
