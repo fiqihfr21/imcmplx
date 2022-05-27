@@ -47,6 +47,5 @@
   },
   "devDependencies": {
     "tailwindcss": "^3.0.23"
-  },
-  "package-name": "git+https://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:x-oauth-basic@github.com/fiqihfr21/imcmplx.git"
+  }
 }
